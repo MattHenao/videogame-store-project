@@ -22,4 +22,8 @@ export class GameService {
     updateGame(id: number, gameInterface: GameInterface) {
         return this.gameRepository.update(id, gameInterface);
     }
+
+    deleteGame(id: number) {
+        return this.gameRepository.delete(id);
+    }
 }
