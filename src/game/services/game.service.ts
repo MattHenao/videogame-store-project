@@ -18,4 +18,8 @@ export class GameService {
     findAllGames() {
         return this.gameRepository.find();
     }
+
+    updateGame(id: number, gameInterface: GameInterface) {
+        return this.gameRepository.update(id, gameInterface);
+    }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { GameService } from '../services/game.service';
 import { GameInterface } from '../model/game.interface';
 
@@ -7,12 +7,17 @@ export class GameController {
     constructor(private gameService: GameService) {}
 
     @Post()
-    newGame(@Body() post: GameInterface) {
-        return this.gameService.addNewGame(post)
+    newGame(@Body() game: GameInterface) {
+        return this.gameService.addNewGame(game)
     }
 
     @Get()
     findAllGames() {
         return this.gameService.findAllGames();
+    }
+
+    @Put(':id')
+    updateGames(@Param('id') id: number, @Body() game: GameInterface) {
+        return this.gameService.updateGame(id, game);
     }
 }
