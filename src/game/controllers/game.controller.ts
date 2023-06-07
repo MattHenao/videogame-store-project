@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { GameService } from '../services/game.service';
 import { GameInterface } from '../model/game.interface';
 
@@ -9,5 +9,10 @@ export class GameController {
     @Post()
     newGame(@Body() post: GameInterface) {
         return this.gameService.addNewGame(post)
+    }
+
+    @Get()
+    findAllGames() {
+        return this.gameService.findAllGames();
     }
 }

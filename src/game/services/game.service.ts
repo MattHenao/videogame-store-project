@@ -14,4 +14,8 @@ export class GameService {
     addNewGame(gameInterface: GameInterface) {
         return this.gameRepository.save(gameInterface);
     }
+
+    findAllGames() {
+        return this.gameRepository.find();
+    }
 }
