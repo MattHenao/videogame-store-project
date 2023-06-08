@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { GameEntity } from '../model/game.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -19,8 +19,12 @@ export class GameService {
         return this.gameRepository.find();
     }
 
-    findById(id: number){
-        return this.gameRepository.findOne({ where: {id} });
+    async findById(id: number){
+        const findGame = await this.gameRepository.findOne({ where: { id } });
+        if(findGame === null){
+            throw new BadRequestException('El juego no existe');
+        }
+        return findGame;
     }
 
     updateGame(id: number, gameInterface: GameInterface) {
