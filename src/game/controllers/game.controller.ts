@@ -16,6 +16,11 @@ export class GameController {
         return this.gameService.findAllGames();
     }
 
+    @Get(':id')
+    findGameById(@Param('id') id: number) {
+        return this.gameService.findById(id)
+    }
+
     @Put(':id')
     updateGames(@Param('id') id: number, @Body() game: GameInterface) {
         return this.gameService.updateGame(id, game);

@@ -19,6 +19,10 @@ export class GameService {
         return this.gameRepository.find();
     }
 
+    findById(id: number){
+        return this.gameRepository.findOne({ where: {id} });
+    }
+
     updateGame(id: number, gameInterface: GameInterface) {
         return this.gameRepository.update(id, gameInterface);
     }
