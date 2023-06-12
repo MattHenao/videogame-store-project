@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { GameEntity } from '../model/game.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -15,23 +15,35 @@ export class GameService {
         return this.gameRepository.save(gameInterface);
     }
 
-    findAllGames() {
-        return this.gameRepository.find();
+    async findAllGames() {
+        const findAllGames = await this.gameRepository.find();
+        if(findAllGames.length === 0) {
+            throw new BadRequestException('No hay juegos en la tienda')
+        }
+        return findAllGames;
     }
 
     async findById(id: number){
         const findGame = await this.gameRepository.findOne({ where: { id } });
-        if(findGame === null){
-            throw new BadRequestException('El juego no existe');
+        if(!findGame){
+            throw new BadRequestException('Este juego no esta disponible');
         }
         return findGame;
     }
 
-    updateGame(id: number, gameInterface: GameInterface) {
-        return this.gameRepository.update(id, gameInterface);
+    async updateGame(id: number, gameInterface: GameInterface) {
+        const updatedGame = await this.gameRepository.update(id, gameInterface);
+        if (updatedGame.affected === 0) {
+            throw new NotFoundException('No se pudo encontrar el juego para actualizar');
+        }
+        return updatedGame;
     }
 
-    deleteGame(id: number) {
-        return this.gameRepository.delete(id);
+    async deleteGame(id: number) {
+        const deletedGame = await this.gameRepository.delete(id);
+        if (deletedGame.affected === 0) {
+            throw new NotFoundException('No se pudo encontrar el juego para eliminar');
+        }
+        return deletedGame;
     }
 }
