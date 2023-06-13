@@ -53,6 +53,12 @@ Ya con el programa corriendo, podemos ir al Postman y realizar las diferentes pe
 http://localhost:3000/game
 ```
 
+Podemos visualizar las pruebas unitarias del proyecto corriendo en la terminal:
+
+```
+$ npm run test
+```
+
 Y para mostrar el Swagger generado por el proyecto, tienes que ingresar la siguiente URL en tu navegador:
 
 ```
