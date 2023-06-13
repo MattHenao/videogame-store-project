@@ -27,6 +27,8 @@ _Este proyecto consiste en un CRUD de gestión de una tienda de videojuegos_
 
 Tienes que realizar la conexión con la base de datos, en este caso es PostgreSQL, para ello, tienes que hacer lo siguiente:
 
+* Crear una base de datos en PosgreSQL llamada *videogames_store_db*
+
 * Entra al proyecto con el editor de texto a tu elección y te situas en el siguiente ruta y poner la información de tu base de datos.
 
 ```
