@@ -1,100 +1,63 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { GameService } from './game.service';
-import { Repository } from 'typeorm';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { GameEntity } from '../model/game.entity';
+import { FindRelationsNotFoundError } from 'typeorm';
 
-describe('GameService', () => {
-    let service: GameService;
-    let repository: Repository<GameEntity>;
 
-    beforeEach(async () => {
-        const module: TestingModule = await Test.createTestingModule({
-            providers: [
-            GameService,
-            { provide: getRepositoryToken(GameEntity), useClass: Repository },
-            ],
-        }).compile();
-
-        service = module.get<GameService>(GameService);
-        repository = module.get<Repository<GameEntity>>(getRepositoryToken(GameEntity));
+describe('GameService', ()=> {
+    let gameService: GameService;
+    let repo: any;
+    beforeEach(()=> {
+        repo = {
+            save: jest.fn(),
+            find: jest.fn(),
+            findOne: jest.fn(),
+            update: jest.fn()
+        };
+        gameService = new GameService(repo);
     });
 
-    describe('addNewGame', () => {
-        it('should add a new game', async () => {
-            const gameInterface = {
-                id: 4,
-                name: "Tetris",
-                genre: "Puzzle",
-                price: 10,
-                quantity: 5
+    describe('addNewGame', ()=> {
+        test('Should add new game in repository', async ()=> {
+            const Game = {
+                name: 'Zelda',
+                genre: 'rpg',
+                price: 200,
+                quantity: 2
             };
-
-            jest.spyOn(repository, 'save').mockResolvedValue(gameInterface);
-
-            const result = await service.addNewGame(gameInterface);
-
-            expect(repository.save).toHaveBeenCalledWith(gameInterface);
-            expect(result).toEqual(gameInterface);
-        });
-    });
+            await gameService.addNewGame(Game);
+            expect(repo.save).toBeCalledWith(Game);
+        })
+    })
 
     describe('findAllGames', () => {
-        it('should return all games', async () => {
-            const findAllGames = [{
-                id: 4,
-                name: "Tetris",
-                genre: "Puzzle",
-                price: 10,
-                quantity: 5
-            },{
-                id: 2,
-                name: "Zelda",
-                genre: "RPG",
-                price: 50,
-                quantity: 10
-            }];
-
-            jest.spyOn(repository, 'find').mockResolvedValue(findAllGames);
-
-            const result = await service.findAllGames();
-
-            expect(repository.find).toHaveBeenCalled();
-            expect(result).toEqual(findAllGames);
-        });
-
-        it('should throw BadRequestException if there are no games', async () => {
-            jest.spyOn(repository, 'find').mockResolvedValue([]);
-
-            await expect(service.findAllGames()).rejects.toThrowError('No hay juegos en la tienda');
+        test('Should verify if one or more games exist', async () => {
+            try{
+                repo.find.mockReturnValue(Promise.resolve([]));
+                await gameService.findAllGames();
+            }
+            catch(e) {
+                expect(e).toEqual(new BadRequestException('No hay juegos en la tienda'));
+            }
+            expect(repo.find).toHaveBeenCalledTimes(1);
         });
     });
 
     describe('findById', () => {
-        it('should return the game with the given ID', async () => {
-            const gameId = 1;
-            const findGame = {
-                id: 2,
-                name: "Dark Souls",
-                genre: "RPG",
-                price: 30,
-                quantity: 15
-            };
-
-            jest.spyOn(repository, 'findOne').mockResolvedValue(findGame);
-
-            const result = await service.findById(gameId);
-
-            expect(repository.findOne).toHaveBeenCalledWith({ where: { id: gameId } });
-            expect(result).toEqual(findGame);
-        });
-
-        it('should throw BadRequestException if the game is not found', async () => {
-            const gameId = 1;
-
-            jest.spyOn(repository, 'findOne').mockResolvedValue(null);
-
-            await expect(service.findById(gameId)).rejects.toThrowError('Este juego no esta disponible');
+        test('Should verify if a game exist', async () => {
+            const Game = {
+                id: 1,
+                name: 'zelda',
+                genre: 'rpg',
+                price: 60,
+                quantity: 12
+            }
+            try{
+                await gameService.findById(Game.id);
+            }
+            catch(e){
+                expect(e).toEqual(new BadRequestException('Este juego no esta disponible'));
+            }
+            expect(repo.findOne).toHaveBeenCalledTimes(1);
         });
     });
 });

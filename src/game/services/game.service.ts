@@ -18,7 +18,7 @@ export class GameService {
     async findAllGames() {
         const findAllGames = await this.gameRepository.find();
         if(findAllGames.length === 0) {
-            throw new BadRequestException('No hay juegos en la tienda')
+            throw new BadRequestException('No hay juegos en la tienda');
         }
         return findAllGames;
     }

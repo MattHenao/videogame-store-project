@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { GameService } from '../services/game.service';
 import { GameInterface } from '../model/game.interface';
 
@@ -8,6 +8,9 @@ export class GameController {
 
     @Post()
     newGame(@Body() game: GameInterface) {
+        if (!game.name || !game.genre || !game.price || !game.quantity){
+            throw new BadRequestException('Falta uno o mas parametros por rellenar');
+        }
         return this.gameService.addNewGame(game)
     }
 
