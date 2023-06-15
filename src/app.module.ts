@@ -1,26 +1,26 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule } from '@nestjs/config'
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { GameModule } from './game/game.module';
-import { DatabaseModule } from './database/database.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot( { isGlobal: true } ),
-    TypeOrmModule.forRoot( {
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: '2703',
-      database: 'videogames_store_db',
-      autoLoadEntities: true,
-      synchronize: true
-    } ),
+    ConfigModule.forRoot(),
     GameModule,
-    DatabaseModule
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: '172.19.0.2',
+      port: 5432,
+      username: 'devco',
+      password: 'devco',
+      database: 'postgres',
+      entities: [
+        __dirname + '/../**/*.entity.js',
+      ],
+      synchronize: true
+    })
   ],
   controllers: [AppController],
   providers: [AppService],
