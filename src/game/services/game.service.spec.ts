@@ -10,7 +10,8 @@ describe('GameService', ()=> {
             save: jest.fn(),
             find: jest.fn(),
             findOne: jest.fn(),
-            update: jest.fn()
+            update: jest.fn(),
+            delete: jest.fn()
         };
         gameService = new GameService(repo);
     });
@@ -23,6 +24,7 @@ describe('GameService', ()=> {
                 price: 200,
                 quantity: 2
             };
+
             await gameService.addNewGame(Game);
             expect(repo.save).toBeCalledWith(Game);
         })
@@ -50,6 +52,7 @@ describe('GameService', ()=> {
                 price: 60,
                 quantity: 12
             }
+
             try{
                 await gameService.findById(Game.id);
             }
@@ -60,8 +63,8 @@ describe('GameService', ()=> {
         });
     });
 
-    describe('update', () => {
-        test('Should update one or more fields of a game',async () => {
+    describe('updateGame', () => {
+        test('Should update one or more fields of a game if exist', async () => {
             const Game = {
                 id: 1,
                 name: 'zelda',
@@ -77,6 +80,26 @@ describe('GameService', ()=> {
                 expect(e).toEqual(new NotFoundException('No se pudo encontrar el juego para actualizar'));
             }
             expect(repo.update).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe('deleteGame', () => {
+        test('Should delete a game if exist',async () => {
+            const Game = {
+                id: 1,
+                name: 'zelda',
+                genre: 'rpg',
+                price: 60,
+                quantity: 5
+            }
+
+            try {
+                repo.delete.mockReturnValue(Promise.resolve([]));
+                await gameService.deleteGame(Game.id);
+            } catch (e) {
+                expect(e).toEqual(new NotFoundException('No se pudo encontrar el juego para eliminar'));
+            }
+            expect(repo.delete).toHaveBeenCalledTimes(1);
         });
     });
 });
