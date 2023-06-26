@@ -1,7 +1,6 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { GameService } from './game.service';
-import { FindRelationsNotFoundError } from 'typeorm';
-
+import { ApiGatewayTimeoutResponse } from '@nestjs/swagger';
 
 describe('GameService', ()=> {
     let gameService: GameService;
@@ -58,6 +57,26 @@ describe('GameService', ()=> {
                 expect(e).toEqual(new BadRequestException('Este juego no esta disponible'));
             }
             expect(repo.findOne).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe('update', () => {
+        test('Should update one or more fields of a game',async () => {
+            const Game = {
+                id: 1,
+                name: 'zelda',
+                genre: 'rpg',
+                price: 60,
+                quantity: 5
+            }
+
+            try {
+                repo.update.mockReturnValue(Promise.resolve([]));
+                await gameService.updateGame(Game.id, Game);
+            } catch (e) {
+                expect(e).toEqual(new NotFoundException('No se pudo encontrar el juego para actualizar'));
+            }
+            expect(repo.update).toHaveBeenCalledTimes(1);
         });
     });
 });
