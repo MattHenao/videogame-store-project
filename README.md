@@ -52,6 +52,23 @@ $ docker ps -a
 $ docker inspect <id>
 ```
 
+* Ingresar en *http://localhost:5555/*
+
+* Inicia sesion en PGAdmin:
+
+```
+Email: admin@admin.com
+Pass: admin
+```
+
+* Agregar un nuevo servidor e ingresar los datos:
+
+```
+- **IPAddress**
+- User: devco
+- Pass: devco
+```
+
 ### Ejecución del programa ⚙️
 
 Ya con el programa corriendo, podemos ir al Postman y realizar las diferentes peticiones HTTP de el controller con la siguiente URL:
