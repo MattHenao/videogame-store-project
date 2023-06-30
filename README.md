@@ -10,41 +10,46 @@ _Este proyecto consiste en un CRUD de gestión de una tienda de videojuegos_
 ### Pre-requisitos 📄
 
 * Descargar el proyecto en tu maquina.
-* Tener instalado *PostgreSQL* (Recomendado tener también pgAdmin 4).
+* Tener instalado *Docker* (Se recomienda tener Docke Desktop).
 * Tener instalado *NodeJS*.
 * Tener instalado Postman para realizar las peticiones **HTTP**.
-* Descargar los siguientes paquetes con npm: *TypeORM* con PG y *Swagger*.
+* Descargar los paquetes de npm: *npm install*.
 
 ### Recursos
 
  - [NodeJS](https://nodejs.org/es/download)
  - [NestJS](https://docs.nestjs.com/#installation)
- - [PostgreSQL](https://www.postgresql.org/download/)
- - [TypeORM](https://docs.nestjs.com/recipes/sql-typeorm#getting-started)
  - [Swagger](https://docs.nestjs.com/openapi/introduction)
 
-### Conexión con la base de datos 💾
+### Instalacion de proyecto 💾
 
-Tienes que realizar la conexión con la base de datos, en este caso es PostgreSQL, para ello, tienes que hacer lo siguiente:
+Para poder correr el proyecto, tienes que instalarlo antes, para ello, tienes que hacer lo siguiente:
 
-* Crear una base de datos en PosgreSQL llamada *videogames_store_db*
-
-* Entra al proyecto con el editor de texto a tu elección y te situas en el siguiente ruta y poner la información de tu base de datos.
+* Crear una imagen de docker con el archivo *docker-compose.yml* corriendo el siguiente comando en la consola:
 
 ```
-/src/database/database.providers.ts
+$ docker-compose build
 ```
-* Realizas lo anterior pero en el siguiente archivo:
-```
-/src/app.module.ts
-```
-Ya realizado lo anterior, la base de datos quedara conectada con el proyecto.
 
-### Iniciar el programa 💡
-Para iniciar el programa, tienes que situarte en la raiz del proyecto en la terminal de tu elección y copiar el siguiente comando:
+* Inicia el contenedor de Docker con el siguiente comando:
 
 ```
-$ nest start
+$ docker compose up
+```
+
+### Conectar base de datos PostgreSQL en PGAdmin 💡
+Tenemos que tener corriendo el contenedor y obtener el IPAddress
+
+* Obtener el id del contenedor
+
+```
+$ docker ps -a
+```
+
+* Buscar el **IPAddress** del contenedor:
+
+```
+$ docker inspect <id>
 ```
 
 ### Ejecución del programa ⚙️
